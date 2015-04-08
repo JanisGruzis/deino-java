@@ -49,7 +49,7 @@ public class DienaParser extends RSSFeedParser {
                 art.setCategory(getValue(item, CATEGORY));
                 art.setPredefined_category(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource("Diena");
+                art.setSource(FeedManager.DIENA);
                 addMessage(art);
             }
         } catch (Exception e) {

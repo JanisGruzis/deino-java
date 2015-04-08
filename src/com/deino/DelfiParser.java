@@ -53,7 +53,7 @@ public class DelfiParser extends RSSFeedParser {
                 art.setCategory(getValue(item, CATEGORY));
                 art.setPredefined_category(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource("Delfi");
+                art.setSource(FeedManager.APOLLO);
                 addMessage(art);
             }
         } catch (Exception e) {

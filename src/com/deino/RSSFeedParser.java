@@ -4,20 +4,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.XMLEvent;
 
 
 public abstract class RSSFeedParser {
@@ -46,6 +37,16 @@ public abstract class RSSFeedParser {
             throw new RuntimeException(e);
         }
         category_urls = new HashMap<>();
+         /*
+        category_urls.put("local", "");
+        category_urls.put("business", "");
+        category_urls.put("abroad", "");
+        category_urls.put("sport", "");
+        category_urls.put("culture", "");
+        category_urls.put("car", "");
+        category_urls.put("technology", "");
+        category_urls.put("entertainment", "");
+     */
     }
 
     public void setUrl(String feedUrl) {
@@ -67,15 +68,6 @@ public abstract class RSSFeedParser {
         return messages;
     }
 
-    protected String getCharacterData(XMLEvent event, XMLEventReader eventReader)
-            throws XMLStreamException {
-        String result = "";
-        event = eventReader.nextEvent();
-        if (event instanceof Characters) {
-            result = event.asCharacters().getData();
-        }
-        return result;
-    }
 
     public String getValue(Element parent, String nodeName) {
         String result = parent.getElementsByTagName(nodeName).item(0).getFirstChild().getNodeValue();
@@ -92,7 +84,12 @@ public abstract class RSSFeedParser {
     }
 
     public String getAttribute(Element parent, String nodeName, String attrName) {
-        return parent.getElementsByTagName(nodeName).item(0).getAttributes().getNamedItem(attrName).getNodeValue();
+        String result = "";
+        NodeList list = parent.getElementsByTagName(nodeName);
+        if(list.getLength() >0){
+            list.item(0).getAttributes().getNamedItem(attrName).getNodeValue();
+        }
+        return result     ;
     }
 
 
@@ -100,13 +97,6 @@ public abstract class RSSFeedParser {
         messages.put(art.getURL(), art);
     }
 
-    protected InputStream read() {
-        try {
-            return url.openStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public String getUrl_category() {
         return url_category;

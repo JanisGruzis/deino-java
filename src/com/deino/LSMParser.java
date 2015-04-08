@@ -15,7 +15,7 @@ import java.util.HashMap;
  * Created by Inwhite on 08.04.2015..
  */
 public class LSMParser extends RSSFeedParser {
-    private static final String FEED_URL = "http://www.delfi.lv/rss.php";
+    private static final String FEED_URL = "http://www.lsm.lv/rss/?lang=lv&catid=20";
 
     public LSMParser() {
         super(FEED_URL);
@@ -52,7 +52,7 @@ public class LSMParser extends RSSFeedParser {
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setPredefined_category(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource("LSM");
+                art.setSource(FeedManager.LSM);
                 addMessage(art);
             }
         } catch (Exception e) {

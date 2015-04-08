@@ -51,7 +51,7 @@ public class ApolloParser extends RSSFeedParser {
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setPredefined_category(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource("Apollo");
+                art.setSource(FeedManager.APOLLO);
                 addMessage(art);
             }
         } catch (Exception e) {
