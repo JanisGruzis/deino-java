@@ -43,7 +43,8 @@ public class DienaParser extends RSSFeedParser {
                 art.setTitle(getValue(item, TITLE));
                 getValue(item, DESCRIPTION);
                 String raw_description = getValue(item, DESCRIPTION,1);
-                art.setDescription(raw_description);
+                HTMLParser htmlParser = new HTMLParser(raw_description);
+                art.setDescription(htmlParser.getText());
                 art.setImg_url(getAttribute(item,"enclosure","url"));
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setCategory(getValue(item, CATEGORY));

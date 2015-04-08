@@ -45,6 +45,9 @@ public class HTMLParser {
     public String getText() {
         if(html_doc != null){
             String text = html_doc.text();
+            text = text.replaceAll("\\<.*?>","");
+            text = text.trim();
+            text = text.replaceAll("\\s+", " ");
             return text;
         }
         return "";
