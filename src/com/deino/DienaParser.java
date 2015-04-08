@@ -12,22 +12,19 @@ import java.net.URLConnection;
 import java.util.HashMap;
 
 /**
- * Created by Inwhite on 07.04.2015..
+ * Created by Inwhite on 08.04.2015..
  */
-public class DelfiParser extends RSSFeedParser {
-    private static final String FEED_URL = "http://www.delfi.lv/rss.php";
+public class DienaParser extends RSSFeedParser {
+    private static final String FEED_URL = "http://www.diena.lv/latvija.xml";
 
-    public DelfiParser() {
+    public DienaParser() {
         super(FEED_URL);
         messages = new HashMap<String, Article>();
-         category_urls.put("local", "http://www.delfi.lv/latvija_rss.php");
-        category_urls.put("business", "http://www.delfi.lv/bizness/rss.php");
-        category_urls.put("abroad", "http://www.delfi.lv/arzemes_rss.php");
-        category_urls.put("sport", "http://www.delfi.lv/sports/rss.php");
-        category_urls.put("culture", "http://www.delfi.lv/izklaide_rss.php");
-        category_urls.put("car", "http://www.delfi.lv/auto/rss.php");
-        category_urls.put("technology", "http://www.delfi.lv/tehnika/rss.php");
-        category_urls.put("entertainment", "http://www.delfi.lv/izklaide/rss.php");
+        category_urls.put("local", "http://www.diena.lv/latvija.xml");
+        category_urls.put("abroad", "http://www.diena.lv/pasaule.xml");
+        category_urls.put("sport", "http://www.diena.lv/sports.xml");
+        category_urls.put("culture", "http://www.diena.lv/kd.xml");
+        category_urls.put("entertainment", "http://www.diena.lv/izklaide.xml");
     }
 
     @Override
@@ -44,16 +41,15 @@ public class DelfiParser extends RSSFeedParser {
                 Element item = (Element) items.item(i);
                 Article art = new Article();
                 art.setTitle(getValue(item, TITLE));
-                String raw_description = getValue(item, DESCRIPTION);
-                HTMLParser htmlParser = new HTMLParser(raw_description);
-                art.setDescription(htmlParser.getText());
-                art.setImg_url(htmlParser.getLastImgURL());
-
+                getValue(item, DESCRIPTION);
+                String raw_description = getValue(item, DESCRIPTION,1);
+                art.setDescription(raw_description);
+                art.setImg_url(getAttribute(item,"enclosure","url"));
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setCategory(getValue(item, CATEGORY));
                 art.setPredefined_category(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource("Delfi");
+                art.setSource("Diena");
                 addMessage(art);
             }
         } catch (Exception e) {

@@ -12,22 +12,22 @@ import java.net.URLConnection;
 import java.util.HashMap;
 
 /**
- * Created by Inwhite on 07.04.2015..
+ * Created by Inwhite on 08.04.2015..
  */
-public class DelfiParser extends RSSFeedParser {
+public class LSMParser extends RSSFeedParser {
     private static final String FEED_URL = "http://www.delfi.lv/rss.php";
 
-    public DelfiParser() {
+    public LSMParser() {
         super(FEED_URL);
         messages = new HashMap<String, Article>();
-         category_urls.put("local", "http://www.delfi.lv/latvija_rss.php");
-        category_urls.put("business", "http://www.delfi.lv/bizness/rss.php");
-        category_urls.put("abroad", "http://www.delfi.lv/arzemes_rss.php");
-        category_urls.put("sport", "http://www.delfi.lv/sports/rss.php");
-        category_urls.put("culture", "http://www.delfi.lv/izklaide_rss.php");
-        category_urls.put("car", "http://www.delfi.lv/auto/rss.php");
-        category_urls.put("technology", "http://www.delfi.lv/tehnika/rss.php");
-        category_urls.put("entertainment", "http://www.delfi.lv/izklaide/rss.php");
+        category_urls.put("local", "http://www.lsm.lv/rss/?lang=lv&catid=20");
+        category_urls.put("business", "http://www.lsm.lv/rss/?lang=lv&catid=22");
+        category_urls.put("abroad", "http://www.lsm.lv/rss/?lang=lv&catid=21");
+        category_urls.put("sport", "http://www.lsm.lv/rss/?lang=lv&catid=15");
+        category_urls.put("culture", "http://www.lsm.lv/rss/?lang=lv&catid=67");
+        category_urls.put("car", "http://www.lsm.lv/rss/?lang=lv&catid=269");
+        category_urls.put("technology", "http://www.lsm.lv/rss/?lang=lv&catid=61");
+        category_urls.put("entertainment", "http://www.lsm.lv/rss/?lang=lv&catid=23");
     }
 
     @Override
@@ -47,13 +47,12 @@ public class DelfiParser extends RSSFeedParser {
                 String raw_description = getValue(item, DESCRIPTION);
                 HTMLParser htmlParser = new HTMLParser(raw_description);
                 art.setDescription(htmlParser.getText());
-                art.setImg_url(htmlParser.getLastImgURL());
+                art.setImg_url(getAttribute(item,"enclosure","url"));
 
                 art.setPublication_date(getValue(item, PUB_DATE));
-                art.setCategory(getValue(item, CATEGORY));
                 art.setPredefined_category(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource("Delfi");
+                art.setSource("LSM");
                 addMessage(art);
             }
         } catch (Exception e) {
