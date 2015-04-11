@@ -15,6 +15,7 @@ public class Article {
     private String description;
     private String category;
     private String URL;
+    private String Location;
     private String predefined_category;
     private String img_url;
     private String source;
@@ -92,6 +93,14 @@ public class Article {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getLocation() {
+        return Location;
+    }
+
+    public void setLocation(String location) {
+        Location = location;
     }
 }
 
