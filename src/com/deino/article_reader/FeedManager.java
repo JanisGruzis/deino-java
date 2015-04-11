@@ -35,7 +35,4 @@ public class FeedManager {
         }
         return messages;
     }
-
-
 }
-    

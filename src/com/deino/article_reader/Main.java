@@ -12,10 +12,37 @@ import java.util.Map;
 
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.http.HttpResponse;
 
 public class Main {
 
+
+
+    public static void main(String[] args) {
+
+
+
+        
+//        HashMap<String,Article> result = FeedManager.getMessages();
+//        for (Map.Entry<String, Article> entry : result.entrySet()) {
+//            Article temp = entry.getValue();
+//            System.out.println("=================================");
+//
+//            System.out.println(temp.getSource());
+//            System.out.println(temp.getTitle());
+//            System.out.println(temp.getURL());
+//            System.out.println(temp.getLocation());
+//            System.out.println("=================================");
+//            System.out.println();
+//        }
+
+
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+//        try {
+//			Main.saveToCsv(result, new File("articles_"+dateFormat.format(new Date())+".csv"));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+    }
     public static void saveToCsv(HashMap<String, Article> articles, File f) throws Exception {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
         Article a;
@@ -38,33 +65,5 @@ public class Main {
 
         out.close();
     }
-
-    public static void main(String[] args) {
-
-        HashMap<String,Article> result = FeedManager.getMessages();
-        for (Map.Entry<String, Article> entry : result.entrySet()) {
-            Article temp = entry.getValue();
-            System.out.println("=================================");
-
-            System.out.println(temp.getSource());
-            System.out.println(temp.getTitle());
-            System.out.println(temp.getURL());
-            System.out.println(temp.getLocation());
-            System.out.println("=================================");
-            System.out.println();
-        }
-
-
-//        HttpResponse response = HTTPRequest.get("http://feedproxy.google.com/~r/Apollolv-ZinasLatvija/~3/NH7rRC3MBnQ/688272");
-//        HashMap<String, String> headerMap = HTTPRequest.getHeadersFromResponse(response);
-
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-//        try {
-//			Main.saveToCsv(result, new File("articles_"+dateFormat.format(new Date())+".csv"));
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-    }
-
 
 }
