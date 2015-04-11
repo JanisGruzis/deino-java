@@ -1,12 +1,5 @@
 package com.deino.article_reader;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -38,14 +31,5 @@ public class HTTPRequest {
         }
         return result;
     }
-
-    public static HashMap<String,String> getHeadersFromResponse(HttpResponse resp){
-        HashMap<String,String> result = new HashMap<>();
-        //get all headers
-        Header[] headers = resp.getAllHeaders();
-        for (Header header : headers) {
-            result.put(header.getName(), header.getValue());
-        }
-        return result;
-    }
+    
 }

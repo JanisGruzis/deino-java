@@ -21,7 +21,7 @@ public class Main {
 
 
 
-        
+
 //        HashMap<String,Article> result = FeedManager.getMessages();
 //        for (Map.Entry<String, Article> entry : result.entrySet()) {
 //            Article temp = entry.getValue();
