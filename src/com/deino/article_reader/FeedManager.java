@@ -1,5 +1,6 @@
 package com.deino.article_reader;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,18 +13,18 @@ public class FeedManager {
     public static final String DIENA = "Diena";
     public static final String LSM = "LSM";
     public static final String TVNET = "TVNET";
-    HashMap<String, RSSFeedParser> feeds;
-
-    public FeedManager() {
-        feeds = new HashMap<>();
-        feeds.put(DELFI, new DelfiParser());
-        feeds.put(APOLLO, new ApolloParser());
-        feeds.put(DIENA, new DienaParser());
-        feeds.put(LSM, new LSMParser());
-        feeds.put(TVNET, new TvnetParser());
+    public static final Map<String, RSSFeedParser> feeds;
+    static {
+        HashMap<String, RSSFeedParser> tmp=new HashMap<>();
+        tmp.put(DELFI, new DelfiParser());
+        tmp.put(APOLLO, new ApolloParser());
+        tmp.put(DIENA, new DienaParser());
+        tmp.put(LSM, new LSMParser());
+        tmp.put(TVNET, new TvnetParser());
+        feeds = Collections.unmodifiableMap(tmp);
     }
 
-    public HashMap<String, Article> getMessages() {
+    public static HashMap<String, Article> getMessages() {
         HashMap<String, Article> messages = new HashMap<>();
         for (Map.Entry<String, RSSFeedParser> entry : feeds.entrySet()) {
             RSSFeedParser f = entry.getValue();

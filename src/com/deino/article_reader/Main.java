@@ -39,8 +39,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        FeedManager fm = new FeedManager();
-        HashMap<String,Article> result = fm.getMessages();
+        HashMap<String,Article> result = FeedManager.getMessages();
         for (Map.Entry<String, Article> entry : result.entrySet()) {
             Article temp = entry.getValue();
             System.out.println("=================================");
