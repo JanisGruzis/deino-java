@@ -1,16 +1,14 @@
-package com.deino;
+package com.deino.article_reader;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringEscapeUtils;
-
-import javax.swing.text.DateFormatter;
 
 public class Main {
 	
@@ -18,7 +16,7 @@ public class Main {
 	{
 		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
 		Article a;
-		SimpleDateFormat date_format=new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat date_format=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		
 		out.write("date,title,category,predefined_category,category,description,url,img_url\n");
 		
@@ -57,9 +55,9 @@ public class Main {
             System.out.println("=================================");
             System.out.println();
         }
-        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         try {
-			Main.saveToCsv(result, new File("articles.csv"));
+			Main.saveToCsv(result, new File("articles_"+dateFormat.format(new Date())+".csv"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

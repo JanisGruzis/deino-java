@@ -1,4 +1,4 @@
-package com.deino;
+package com.deino.article_reader;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

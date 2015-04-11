@@ -1,4 +1,4 @@
-package com.deino;
+package com.deino.article_reader;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,19 +14,19 @@ import java.util.HashMap;
 /**
  * Created by Inwhite on 08.04.2015..
  */
-public class TvnetParser extends RSSFeedParser {
+public class ApolloParser extends RSSFeedParser {
     private static final String FEED_URL = "http://www.delfi.lv/rss.php";
 
-    public TvnetParser() {
+    public ApolloParser() {
         super(FEED_URL);
         messages = new HashMap<String, Article>();
-        category_urls.put("local", "http://feeds.tvnet.lv/tvnet/zinas/latest?format=xml");
-        category_urls.put("business", "http://feeds.tvnet.lv/tvnet/financenet/latest?format=xml");
-        category_urls.put("sport", "http://feeds.tvnet.lv/tvnet/sports/latest?format=xml");
-        category_urls.put("culture", "http://feeds.tvnet.lv/tvnet/izklaide/latest?format=xml");
-        category_urls.put("car", "http://feeds.tvnet.lv/tvnet/auto/latest?format=xml");
-        category_urls.put("technology", "http://feeds.tvnet.lv/tvnet/tehnologijas/latest?format=xml");
-        category_urls.put("entertainment", "http://feeds.tvnet.lv/tvnet/izklaide/latest?format=xml");
+        category_urls.put("local", "http://feeds.feedburner.com/Apollolv-ZinasLatvija?format=xml");
+        category_urls.put("business", "http://feeds.feedburner.com/Apollolv-Ekonomika");
+        category_urls.put("abroad", "http://feeds.feedburner.com/arvalstis");
+        category_urls.put("sport", "http://feeds.feedburner.com/Apollolv-Sports");
+        category_urls.put("culture", "http://feeds.feedburner.com/Apollolv-Kultura");
+        category_urls.put("car", "http://feeds.feedburner.com/Apollolv-Auto");
+        category_urls.put("entertainment", "http://feeds.feedburner.com/Apollolv-Muzika");
     }
 
     @Override
@@ -43,15 +43,15 @@ public class TvnetParser extends RSSFeedParser {
                 Element item = (Element) items.item(i);
                 Article art = new Article();
                 art.setTitle(getValue(item, TITLE));
-                String raw_description = getValue(item, DESCRIPTION,1);
+                String raw_description = getValue(item, DESCRIPTION);
                 HTMLParser htmlParser = new HTMLParser(raw_description);
                 art.setDescription(htmlParser.getText());
-                art.setImg_url(htmlParser.getLastImgURL());
+                art.setImg_url(htmlParser.getFirstImgURL());
 
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setPredefined_category(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource(FeedManager.TVNET);
+                art.setSource(FeedManager.APOLLO);
                 addMessage(art);
             }
         } catch (Exception e) {

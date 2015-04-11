@@ -1,4 +1,4 @@
-package com.deino;
+package com.deino.article_reader;
 
 import java.util.HashMap;
 import java.util.Map;

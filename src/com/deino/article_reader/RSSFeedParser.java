@@ -1,4 +1,4 @@
-package com.deino;
+package com.deino.article_reader;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
