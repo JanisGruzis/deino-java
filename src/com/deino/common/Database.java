@@ -21,7 +21,7 @@ import java.text.ParseException;
 import java.util.*;
 
 /**
- * Created by Rob on 11.04.2015..
+ * Created by Rob the Bob on 11.04.2015..
  */
 public class Database {
 
@@ -210,12 +210,14 @@ public class Database {
         Cluster first = getCluster(first_id);
         Cluster second = getCluster(second_id);
         if(first != null && second != null){
-
+            first.getArticle_ids().addAll(second.getArticle_ids()); // i believed Rob on this , but i think he lied...
+            setClusterForArticles(first.getId(),second.getArticle_ids());
+            //remove second cluster from DB
         }
         return null;
     }
 
     public static void setClusterForArticles(String cluster_id, List<String> articles_id){
-
+        //update all articles with ids in list, with provided cluster id
     }
 }

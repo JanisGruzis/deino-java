@@ -13,6 +13,7 @@ public class Cluster {
     Date first_date;
     Date last_date;
     List<String> article_ids;
+    private String id;
 
     public Cluster() {
         setType("");
@@ -68,5 +69,13 @@ public class Cluster {
 
     public void setArticle_ids(List<String> article_ids) {
         this.article_ids = article_ids;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
