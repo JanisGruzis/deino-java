@@ -31,5 +31,5 @@ public class HTTPRequest {
         }
         return result;
     }
-    
+
 }

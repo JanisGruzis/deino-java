@@ -1,13 +1,8 @@
 package com.deino.article_reader;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -21,16 +16,16 @@ public class Main {
 
 
 
-
 //        HashMap<String,Article> result = FeedManager.getMessages();
 //        for (Map.Entry<String, Article> entry : result.entrySet()) {
 //            Article temp = entry.getValue();
 //            System.out.println("=================================");
 //
-//            System.out.println(temp.getSource());
+////            System.out.println(temp.getSource());
 //            System.out.println(temp.getTitle());
-//            System.out.println(temp.getURL());
-//            System.out.println(temp.getLocation());
+//            System.out.println(temp.getPredefined_category());
+////            System.out.println(temp.getURL());
+////            System.out.println(temp.getLocation());
 //            System.out.println("=================================");
 //            System.out.println();
 //        }
