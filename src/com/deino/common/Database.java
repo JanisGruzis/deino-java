@@ -9,6 +9,7 @@ import com.clusterpoint.api.response.CPSSearchResponse;
 import com.deino.article_reader.Article;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
@@ -27,10 +28,9 @@ public class Database {
     static {
         CPSConnection tmp;
         try {
-//            Scanner in = new Scanner(new InputStreamReader(new FileInputStream(new File("db.conf"))));
-            //System.out.printf("'%s' '%s' '%s' '%s'\n",in.next(),in.next(),in.next(),in.next(),in.next(),in.next());
-//            tmp = new CPSConnection(in.next(), in.next(), in.next(), in.next(), in.next(), in.next(), in.next());
-            tmp = new CPSConnection("tcp://78.154.146.20:9007", "deino", "realywhynot@inbox.lv", "qwerty123");
+            Scanner in = new Scanner(new InputStreamReader(new FileInputStream(new File("db.conf"))));
+//            System.out.printf("'%s' '%s' '%s' '%s'\n",in.next(),in.next(),in.next(),in.next(),in.next(),in.next());
+            tmp = new CPSConnection(in.next(), in.next(), in.next(), in.next(), in.next(), in.next(), in.next());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -80,7 +80,7 @@ public class Database {
 
     public static Article getUnclusterizedArticle() {
         try {
-            CPSSearchRequest req = new CPSSearchRequest("<cluster_id>-1</cluster_id>", 0, 1);
+            CPSSearchRequest req = new CPSSearchRequest("<" + CPSBase.CLUST_ID + ">-1</" + CPSBase.CLUST_ID + ">", 0, 1);
             CPSSearchResponse resp = (CPSSearchResponse) connection.sendRequest(req);
             if (resp.getFound() == 0)
                 return null;
@@ -111,10 +111,10 @@ public class Database {
 
             CPSSearchRequest req = new CPSSearchRequest(String.format(
                     "<id>~%s</id>" +
-                            "<source>~%s</source>" +
-                            "<predefined_category>%s</predefined_category>" +
-                            "<date> >= %s</date>" +
-                            "<token>{%s}</token>",
+                            "<" + CPSBase.SRC + ">~%s</" + CPSBase.SRC + ">" +
+                            "<" + CPSBase.PRED_CAT + ">%s</" + CPSBase.PRED_CAT + ">" +
+                            "<" + CPSBase.DATE + "> >= %s</" + CPSBase.DATE + ">" +
+                            "<" + CPSBase.TOKEN + ">{%s}</" + CPSBase.TOKEN + ">",
                     StringEscapeUtils.escapeXml10(article.getId()),
                     StringEscapeUtils.escapeXml10(article.getSource()),
                     StringEscapeUtils.escapeXml10(date),
@@ -140,25 +140,30 @@ public class Database {
     public static Article parseArticle(Element doc) {
         Article article = new Article();
         try {
-            article.setPublication_date(CPSBase.dateFormat.parse(doc.getElementsByTagName("date").item(0).getNodeValue()));
+            article.setPublication_date(CPSBase.dateFormat.parse(doc.getElementsByTagName(CPSBase.DATE).item(0).getChildNodes().item(0).getNodeValue()));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        article.setTitle(doc.getElementsByTagName("title").item(0).getNodeValue());
-        article.setDescription(doc.getElementsByTagName("description").item(0).getNodeValue());
-        article.setCategory(doc.getElementsByTagName("category_id").item(0).getNodeValue());
-        article.setURL(doc.getElementsByTagName("url").item(0).getNodeValue());
-        article.setPredefined_category(doc.getElementsByTagName("predefined_category").item(0).getNodeValue());
-        article.setImg_url(doc.getElementsByTagName("img_url").item(0).getNodeValue());
-        article.setSource(doc.getElementsByTagName("source").item(0).getNodeValue());
-        article.setCluster(doc.getElementsByTagName("cluster_id").item(0).getNodeValue());
+        article.setTitle(doc.getElementsByTagName(CPSBase.TITLE).item(0).getChildNodes().item(0).getNodeValue());
+        article.setDescription(doc.getElementsByTagName(CPSBase.DESCRIPTION).item(0).getChildNodes().item(0).getNodeValue());
+        NodeList list = doc.getElementsByTagName(CPSBase.CAT_ID);
+        if (list.getLength() > 0)
+            article.setCategory(list.item(0).getNodeValue());
+
+        article.setURL(doc.getElementsByTagName(CPSBase.URL).item(0).getChildNodes().item(0).getNodeValue());
+        article.setPredefined_category(doc.getElementsByTagName(CPSBase.PRED_CAT).item(0).getChildNodes().item(0).getNodeValue());
+        article.setImg_url(doc.getElementsByTagName(CPSBase.IMG_URL).item(0).getChildNodes().item(0).getNodeValue());
+        article.setSource(doc.getElementsByTagName(CPSBase.SRC).item(0).getChildNodes().item(0).getNodeValue());
+        article.setCluster(doc.getElementsByTagName(CPSBase.CLUST_ID).item(0).getChildNodes().item(0).getNodeValue());
 
         HashMap<String, Double> keywords = new HashMap<>();
         Element item;
-        NodeList items = doc.getElementsByTagName("token");
+        NodeList items = doc.getElementsByTagName(CPSBase.TOKEN);
         for (int i = 0; i < items.getLength(); i++) {
             item = (Element) items.item(i);
-            keywords.put(item.getNodeValue(), Double.parseDouble(item.getAttribute("frequency")));
+            Double frequency = Double.parseDouble(item.getAttribute(CPSBase.FREQ));
+            String value = item.getChildNodes().item(0).getNodeValue();
+            keywords.put(value, frequency);
         }
 
         article.setKeywords(keywords);
@@ -169,8 +174,9 @@ public class Database {
     public static Cluster getCluster(String id) {
         try {
             CPSSearchRequest req = new CPSSearchRequest(String.format(
-                    "<type>cluster</type>" +
-                            "<id>%s</id>", id), 0, 1);
+                    "<" + CPSBase.TYPE + ">cluster</" + CPSBase.TYPE + ">" +
+                            "<" + CPSBase.ID + ">%s</" + CPSBase.ID + ">"
+                    , id), 0, 1);
             CPSSearchResponse resp = (CPSSearchResponse) connection.sendRequest(req);
             if (resp.getFound() == 0)
                 return null;
@@ -185,17 +191,18 @@ public class Database {
         Cluster cl = new Cluster();
 
         try {
-            cl.setFirst_date(CPSBase.dateFormat.parse(doc.getElementsByTagName("first_date").item(0).getNodeValue()));
-            cl.setLast_date(CPSBase.dateFormat.parse(doc.getElementsByTagName("last_date").item(0).getNodeValue()));
+            cl.setFirst_date(CPSBase.dateFormat.parse(doc.getElementsByTagName(CPSBase.FIRST_DATE).item(0).getChildNodes().item(0).getNodeValue()));
+            cl.setLast_date(CPSBase.dateFormat.parse(doc.getElementsByTagName(CPSBase.LAST_DATE).item(0).getChildNodes().item(0).getNodeValue()));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        cl.setCategory_id(doc.getElementsByTagName("category_id").item(0).getNodeValue());
+        cl.setCategory_id(doc.getElementsByTagName(CPSBase.CAT_ID).item(0).getChildNodes().item(0).getNodeValue());
+        cl.setId(doc.getElementsByTagName(CPSBase.ID).item(0).getChildNodes().item(0).getNodeValue());
 
-        Element item;
-        NodeList items = doc.getElementsByTagName("articles");
+        Node item;
+        NodeList items = doc.getElementsByTagName(CPSBase.ARTICLE);
         for (int i = 0; i < items.getLength(); i++) {
-            item = (Element) items.item(i);
+            item = items.item(i).getChildNodes().item(0);
             cl.getArticle_ids().add(item.getNodeValue());
         }
         return cl;
@@ -215,31 +222,34 @@ public class Database {
             first.setLast_date(
                     first.getLast_date().compareTo(second.getLast_date()) == 1 ?
                             first.getLast_date() : second.getLast_date());
+            update(first);
+            return first.getId();
         }
         return null;
     }
 
-    private static void delete(String id) {
+    private static String[] delete(String id) {
         try {
             String ids[] = {id};
             CPSDeleteRequest delete_req = new CPSDeleteRequest(ids);
             CPSModifyResponse delete_resp = (CPSModifyResponse) connection.sendRequest(delete_req);
             //Print out deleted ids
             System.out.println("Deleted ids: " + Arrays.toString(delete_resp.getModifiedIds()));
-
-            //Close connection
-            connection.close();
-
+            return delete_resp.getModifiedIds();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void setClusterForArticles(String cluster_id, List<String> articles_id) {
         CPSUpdateRequest req = new CPSUpdateRequest();
         LinkedList<String> docs = new LinkedList<>();
-        for(String id:articles_id){
-            docs.add(String.format("<document><id>%s</id><cluster>%s</cluster></document>",id,cluster_id));
+        for (String id : articles_id) {
+            docs.add(String.format("<document>" +
+                    "<" + CPSBase.ID + ">%s</" + CPSBase.ID + ">" +
+                    "<" + CPSBase.CLUST_ID + ">%s</" + CPSBase.CLUST_ID + ">" +
+                    "</document>", id, cluster_id));
         }
         req.setStringDocuments(docs);
         try {
