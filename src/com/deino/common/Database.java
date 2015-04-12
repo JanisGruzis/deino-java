@@ -186,10 +186,23 @@ public class Database {
         }
     }
 
-    private static Cluster parseCluster(Element element) {
+    private static Cluster parseCluster(Element doc) {
         Cluster cl = new Cluster();
-        
 
+        try {
+            cl.setFirst_date(Article.dateFormat.parse(doc.getElementsByTagName("first_date").item(0).getNodeValue()));
+            cl.setLast_date(Article.dateFormat.parse(doc.getElementsByTagName("last_date").item(0).getNodeValue()));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        cl.setCategory(doc.getElementsByTagName("category").item(0).getNodeValue());
+
+        Element item;
+        NodeList items=doc.getElementsByTagName("articles");
+        for (int i = 0; i < items.getLength(); i++) {
+            item=(Element)items.item(i);
+            cl.getArticle_ids().add(item.getNodeValue());
+        }
         return cl;
     }
 
