@@ -25,6 +25,7 @@ public class Article {
     private String description;
     private String category;
     private String URL;
+    private String Location;
     private String predefined_category;
     private String img_url;
     private String source;
@@ -112,10 +113,14 @@ public class Article {
 
     public String getId() {
         return id;
+    public String getLocation() {
+        return Location;
     }
 
     public HashMap<String, Double> getKeywords() {
         return keywords;
+    public void setLocation(String location) {
+        Location = location;
     }
 
     public void setKeywords(HashMap<String, Double> keywords) {

@@ -14,8 +14,9 @@ public class FeedManager {
     public static final String LSM = "LSM";
     public static final String TVNET = "TVNET";
     public static final Map<String, RSSFeedParser> feeds;
+
     static {
-        HashMap<String, RSSFeedParser> tmp=new HashMap<>();
+        HashMap<String, RSSFeedParser> tmp = new HashMap<>();
         tmp.put(DELFI, new DelfiParser());
         tmp.put(APOLLO, new ApolloParser());
         tmp.put(DIENA, new DienaParser());
@@ -27,12 +28,11 @@ public class FeedManager {
     public static HashMap<String, Article> getMessages() {
         HashMap<String, Article> messages = new HashMap<>();
         for (Map.Entry<String, RSSFeedParser> entry : feeds.entrySet()) {
+            System.out.println("Reading " + entry.getKey() + "...");
             RSSFeedParser f = entry.getValue();
 
             messages.putAll(f.getMessages());
         }
         return messages;
     }
-
-
 }
