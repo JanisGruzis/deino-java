@@ -53,7 +53,7 @@ public class Database {
         return resp.getDocuments().size() == 1;
     }
 
-    public static void update(CPSSavable obj) {
+    public static void update(CPSBase obj) {
         CPSUpdateRequest req = new CPSUpdateRequest();
         LinkedList<String> docs = new LinkedList<>();
         docs.add(obj.toXML());
@@ -65,7 +65,7 @@ public class Database {
         }
     }
 
-    public static void insert(CPSSavable obj) {
+    public static void insert(CPSBase obj) {
         CPSInsertRequest req = new CPSInsertRequest();
         LinkedList<String> docs = new LinkedList<>();
         docs.add(obj.toXML());
@@ -100,7 +100,7 @@ public class Database {
             Calendar cal = Calendar.getInstance();
             cal.setTime(article.getPublication_date());
             cal.add(Calendar.DATE, -2); //minus two days;
-            String date = Article.dateFormat.format(cal.getTime());
+            String date = CPSBase.dateFormat.format(cal.getTime());
 
             StringBuilder builder = new StringBuilder();
 
@@ -139,7 +139,7 @@ public class Database {
     public static Article parseArticle(Element doc) {
         Article article = new Article();
         try {
-            article.setPublication_date(Article.dateFormat.parse(doc.getElementsByTagName("date").item(0).getNodeValue()));
+            article.setPublication_date(CPSBase.dateFormat.parse(doc.getElementsByTagName("date").item(0).getNodeValue()));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -184,8 +184,8 @@ public class Database {
         Cluster cl = new Cluster();
 
         try {
-            cl.setFirst_date(Article.dateFormat.parse(doc.getElementsByTagName("first_date").item(0).getNodeValue()));
-            cl.setLast_date(Article.dateFormat.parse(doc.getElementsByTagName("last_date").item(0).getNodeValue()));
+            cl.setFirst_date(CPSBase.dateFormat.parse(doc.getElementsByTagName("first_date").item(0).getNodeValue()));
+            cl.setLast_date(CPSBase.dateFormat.parse(doc.getElementsByTagName("last_date").item(0).getNodeValue()));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

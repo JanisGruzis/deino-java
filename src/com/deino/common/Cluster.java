@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Inwhite on 4/12/2015.
  */
-public class Cluster  implements CPSSavable {
+public class Cluster  extends CPSBase {
     String type;
     String category;
     Date first_date;
@@ -93,8 +93,8 @@ public class Cluster  implements CPSSavable {
                         "<last_date>%s</last_date>" +
                         "<size>%s</size>",
                 StringEscapeUtils.escapeXml10(id),
-                StringEscapeUtils.escapeXml10(Article.dateFormat.format(first_date)),
-                StringEscapeUtils.escapeXml10(Article.dateFormat.format(last_date)),
+                StringEscapeUtils.escapeXml10(CPSBase.dateFormat.format(first_date)),
+                StringEscapeUtils.escapeXml10(CPSBase.dateFormat.format(last_date)),
                 StringEscapeUtils.escapeXml10(String.valueOf(article_ids.size()))
         ));
 
