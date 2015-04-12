@@ -1,5 +1,6 @@
 package com.deino.article_reader;
 
+import com.deino.common.CPSSavable;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.text.DateFormat;
@@ -13,7 +14,7 @@ import java.util.Map;
 /**
  * Created by Inwhite on 07.04.2015..
  */
-public class Article {
+public class Article implements CPSSavable {
 
     public static String URLtoID(String URL)
     {
