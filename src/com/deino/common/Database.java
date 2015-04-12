@@ -95,6 +95,7 @@ public class Database {
         }
     }
 
+
     public static List<Article> getSimilarArticles(Article article)
     {
 
@@ -169,5 +170,39 @@ public class Database {
         article.setKeywords(keywords);
 
         return article;
+    }
+    public static Cluster getCluster(String id){
+        try {
+            CPSSearchRequest req = new CPSSearchRequest(String.format(
+                    "<type>cluster</type>" +
+                    "<id>%s</id>",id), 0, 1);
+            CPSSearchResponse resp = (CPSSearchResponse) connection.sendRequest(req);
+            if (resp.getFound() == 0)
+                return null;
+            Cluster cl = parseCluster(resp.getDocuments().get(0));
+            return cl;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Cluster parseCluster(Element element) {
+        Cluster cl = new Cluster();
+        
+
+        return cl;
+    }
+
+    public static String mergeCluster(String first_id,String second_id) {
+        Cluster first = getCluster(first_id);
+        Cluster second = getCluster(second_id);
+        if(first != null && second != null){
+
+        }
+        return null;
+    }
+
+    public static void setClusterForArticles(String cluster_id, List<String> articles_id){
+
     }
 }
