@@ -27,9 +27,10 @@ public class Database {
     static {
         CPSConnection tmp;
         try {
-            Scanner in = new Scanner(new InputStreamReader(new FileInputStream(new File("db.conf"))));
+//            Scanner in = new Scanner(new InputStreamReader(new FileInputStream(new File("db.conf"))));
             //System.out.printf("'%s' '%s' '%s' '%s'\n",in.next(),in.next(),in.next(),in.next(),in.next(),in.next());
-            tmp = new CPSConnection(in.next(), in.next(), in.next(), in.next(), in.next(), in.next(), in.next());
+//            tmp = new CPSConnection(in.next(), in.next(), in.next(), in.next(), in.next(), in.next(), in.next());
+            tmp = new CPSConnection("tcp://78.154.146.20:9007", "deino", "realywhynot@inbox.lv", "qwerty123");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -189,7 +190,7 @@ public class Database {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        cl.setCategory(doc.getElementsByTagName("category").item(0).getNodeValue());
+        cl.setCategory_id(doc.getElementsByTagName("category_id").item(0).getNodeValue());
 
         Element item;
         NodeList items = doc.getElementsByTagName("articles");

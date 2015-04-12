@@ -1,6 +1,5 @@
 package com.deino.common;
 
-import com.deino.article_reader.Article;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class Cluster  extends CPSBase {
     String type;
-    String category;
+    String category_id;
     Date first_date;
     Date last_date;
     List<String> article_ids;
@@ -20,7 +19,7 @@ public class Cluster  extends CPSBase {
 
     public Cluster() {
         setType("");
-        setCategory("");
+        setCategory_id("");
         setFirst_date(new Date());
         setLast_date(new Date());
         setArticle_ids(new ArrayList<String>());
@@ -38,12 +37,12 @@ public class Cluster  extends CPSBase {
         this.type = type;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCategory_id() {
+        return category_id;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategory_id(String category_id) {
+        this.category_id = category_id;
     }
 
     public Date getFirst_date() {

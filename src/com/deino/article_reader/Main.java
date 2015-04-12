@@ -2,10 +2,13 @@ package com.deino.article_reader;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 
+import com.deino.common.Cluster;
+import com.deino.common.Database;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class Main {
@@ -14,7 +17,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-
+        Cluster cl =  new Cluster();
+        cl.setId("asdasd");
+        cl.setFirst_date(new Date());
+        cl.setLast_date(new Date());
+        cl.addArticleId("asdasd");
+        cl.addArticleId("qweqwe");
+        cl.addArticleId("213213");
+        cl.setCategory_id("aaaaaaaaaa");
+        String xml = cl.toXML();
+        System.out.println(xml);
+        Database.insert(cl);
 
 //        HashMap<String,Article> result = FeedManager.getMessages();
 //        for (Map.Entry<String, Article> entry : result.entrySet()) {
