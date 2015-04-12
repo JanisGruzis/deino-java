@@ -1,6 +1,5 @@
 .idea/
 /out
 /leta_news
-*.iml
 *.csv
 *.tsv
