@@ -16,8 +16,7 @@ import java.util.Map;
  */
 public class Article extends CPSBase {
 
-    public static String URLtoID(String URL)
-    {
+    public static String URLtoID(String URL) {
         return URL.replaceAll("\\W", "");
     }
 
@@ -30,13 +29,15 @@ public class Article extends CPSBase {
     private String img_url;
     private String source;
     private String id;
+    private String type;
     private String cluster = "-1";
     private HashMap<String, Double> keywords;
 
 
     public Article() {
-        title = description = category = URL = "";
+        title = description = category = URL = img_url = source = id = predefined_category = "";
         publication_date = new Date();
+        type = "article";
     }
 
     public Date getPublication_date() {
@@ -79,7 +80,7 @@ public class Article extends CPSBase {
 
     public void setURL(String URL) {
         this.URL = URL;
-        id=URLtoID(URL);
+        id = URLtoID(URL);
     }
 
     public void setPredefined_category(String predefined_category) {
@@ -126,17 +127,17 @@ public class Article extends CPSBase {
         StringBuilder s = new StringBuilder();
         s.append(String.format(
                 "<document>" +
-                        "<id>%s</id>" +
-                        "<type>article</type>" +
-                        "<date>%s</date>" +
-                        "<title>%s</title>" +
-                        "<description>%s</description>" +
-                        "<category_id>%s</category_id>" +
-                        "<url>%s</url>" +
-                        "<predefined_category>%s</predefined_category>" +
-                        "<img_url>%s</img_url>" +
-                        "<source>%s</source>" +
-                        "<cluster_id>%s</cluster_id>",
+                        "<" + ID + ">%s</" + ID + ">" +
+                        "<"+CPSBase.TYPE+">article</"+CPSBase.TYPE+">" +
+                        "<" + DATE + ">%s</" + DATE + ">" +
+                        "<" + TITLE + ">%s</" + TITLE + ">" +
+                        "<" + DESCRIPTION + ">%s</" + DESCRIPTION + ">" +
+                        "<" + CAT_ID + ">%s</" + CAT_ID + ">" +
+                        "<" + CPSBase.URL + ">%s</" + CPSBase.URL + ">" +
+                        "<" + PRED_CAT + ">%s</" + PRED_CAT + ">" +
+                        "<" + CPSBase.IMG_URL + ">%s</"+CPSBase.IMG_URL+">" +
+                        "<" + SRC + ">%s</" + SRC + ">" +
+                        "<" + CLUST_ID + ">%s</" + CLUST_ID + ">",
                 StringEscapeUtils.escapeXml10(id),
                 StringEscapeUtils.escapeXml10(dateFormat.format(publication_date)),
                 StringEscapeUtils.escapeXml10(title),
@@ -152,7 +153,7 @@ public class Article extends CPSBase {
         s.append("<tokens>");
         if (keywords != null) {
             for (Map.Entry<String, Double> entry : keywords.entrySet()) {
-                s.append(String.format("<token frequency=\"%s\">%s</token>",
+                s.append(String.format("<" + TOKEN + " " + FREQ + "=\"%s\">%s</" + TOKEN + ">",
                         Double.toString(entry.getValue()),
                         StringEscapeUtils.escapeXml10(entry.getKey())));
             }
@@ -168,6 +169,18 @@ public class Article extends CPSBase {
 
     public void setCluster(String cluster) {
         this.cluster = cluster;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
 

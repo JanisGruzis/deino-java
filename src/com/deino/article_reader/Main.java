@@ -1,5 +1,6 @@
 package com.deino.article_reader;
 
+import java.awt.image.DataBuffer;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,23 +12,36 @@ import com.deino.common.Cluster;
 import com.deino.common.Database;
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import javax.xml.crypto.Data;
+
 public class Main {
 
 
 
     public static void main(String[] args) {
 
-        Cluster cl =  new Cluster();
-        cl.setId("asdasd");
-        cl.setFirst_date(new Date());
-        cl.setLast_date(new Date());
-        cl.addArticleId("asdasd");
-        cl.addArticleId("qweqwe");
-        cl.addArticleId("213213");
-        cl.setCategory_id("aaaaaaaaaa");
-        String xml = cl.toXML();
-        System.out.println(xml);
-        Database.insert(cl);
+//        Cluster cl =  new Cluster();
+//        cl.setId("second");
+//        cl.setFirst_date(new Date());
+//        cl.setLast_date(new Date());
+//        cl.addArticleId("22");
+//        cl.addArticleId("33");
+//        cl.setCategory_id("SECOND CATEGORY HURR DURR");
+//        Article art = new Article();
+//        art.setURL("11");
+//        art.setCluster("first");
+//        Database.insert(art);
+//        art = new Article();
+//        art.setURL("22");
+//        art.setCluster("second");
+//        Database.insert(art);
+//        art = new Article();
+//        art.setURL("33");
+//        art.setCluster("second");
+//        Database.insert(art);
+
+//        Database.insert(cl);
+//       Database.mergeCluster("first","second");
 
 //        HashMap<String,Article> result = FeedManager.getMessages();
 //        for (Map.Entry<String, Article> entry : result.entrySet()) {

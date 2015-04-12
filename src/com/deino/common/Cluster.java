@@ -18,7 +18,7 @@ public class Cluster  extends CPSBase {
     private String id;
 
     public Cluster() {
-        setType("");
+        setType("cluster");
         setCategory_id("");
         setFirst_date(new Date());
         setLast_date(new Date());
@@ -86,25 +86,26 @@ public class Cluster  extends CPSBase {
         StringBuilder s = new StringBuilder();
         s.append(String.format(
                 "<document>" +
-                        "<id>%s</id>" +
-                        "<type>cluster</type>" +
-                        "<first_date>%s</first_date>" +
-                        "<last_date>%s</last_date>" +
+                        "<"+ID+">%s</"+ID+">" +
+                        "<"+CPSBase.TYPE+">cluster</"+CPSBase.TYPE+">" +
+                        "<"+CAT_ID+">%s</"+CAT_ID+">" +
+                        "<"+FIRST_DATE+">%s</"+FIRST_DATE+">" +
+                        "<"+LAST_DATE+">%s</"+LAST_DATE+">" +
                         "<size>%s</size>",
                 StringEscapeUtils.escapeXml10(id),
+                StringEscapeUtils.escapeXml10(category_id),
                 StringEscapeUtils.escapeXml10(CPSBase.dateFormat.format(first_date)),
                 StringEscapeUtils.escapeXml10(CPSBase.dateFormat.format(last_date)),
                 StringEscapeUtils.escapeXml10(String.valueOf(article_ids.size()))
         ));
 
-        s.append("<articles>");
         if (article_ids != null) {
             for (String aid : article_ids) {
-                s.append(String.format("<article>%s</article>",
+                s.append(String.format("<"+ARTICLE+">%s</"+ARTICLE+">",
                         StringEscapeUtils.escapeXml10(aid)));
             }
         }
-        s.append("</articles></document>");
+        s.append("</document>");
 
         return s.toString();
     }
