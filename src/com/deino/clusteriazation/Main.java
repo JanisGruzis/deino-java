@@ -9,10 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by Rob the Bob on 12.04.2015..
@@ -53,7 +50,42 @@ public class Main {
 
     private static void clusterizeArticle(Article article)
     {
-        
+        List<Article> similar=Database.getSimilarArticles(article);
+        HashMap<String,List<Article>> equal=new HashMap<>();
+        List<Article> articles;
+
+        for(Article other : similar)
+        {
+            if(NLP.isEqual(article.getKeywords(),other.getKeywords()))
+            {
+                articles=equal.get(other.getCluster());
+                if(articles==null) {
+                    articles = new ArrayList<>();
+                    equal.put(other.getCluster(),articles);
+                }
+                articles.add(other);
+            }
+        }
+
+        articles=equal.get(article.getCluster());
+        if(articles==null) {
+            articles = new ArrayList<>();
+            equal.put(article.getCluster(),articles);
+        }
+        articles.add(article);
+
+        String cluster_id = Database.createCluster(articles);
+        equal.remove("-1");
+        equal.put(cluster_id, articles);
+
+        Database.mergeCluster(equal.keySet());
+    }
+
+    public static void clusteizeNewArticles()
+    {
+        Article article;
+        while((article=Database.getUnclusterizedArticle())!=null)
+            clusterizeArticle(article);
     }
 
     public static void main(String[] args) {

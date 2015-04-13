@@ -11,6 +11,7 @@ import java.util.*;
 public class NLP {
 
     private static HashMap<String,Double> idf;
+    private static double threshold=0.8;
     private static double default_idf=1000;
     static
     {
@@ -75,9 +76,44 @@ public class NLP {
             idf=NLP.idf.get(entry.getKey());
             if(idf==null)
                 idf=default_idf;
-            relative_tokens.put(entry.getKey(),entry.getValue()/n*idf);
+            relative_tokens.put(entry.getKey(), entry.getValue() / n * idf);
         }
 
         return relative_tokens;
+    }
+
+    public static boolean isEqual(HashMap<String, Double> a, HashMap<String, Double> b) {
+        return threshold<cosineSimilarity(a,b);
+    }
+
+    public static Double cosineSimilarity(HashMap<String, Double> a, HashMap<String, Double> b)
+    {
+        double multiplication=0;
+        double a_score=0;
+        double b_score=0;
+
+
+        Double tmp;
+        for(Map.Entry<String,Double> entry : a.entrySet())
+        {
+            if((tmp=b.get(entry.getKey()))!=null)
+            {
+                multiplication+=entry.getValue()*tmp;
+            }
+        }
+
+        for(Map.Entry<String,Double> entry : a.entrySet())
+        {
+            a_score+=entry.getValue()*entry.getValue();
+        }
+
+        for(Map.Entry<String,Double> entry : b.entrySet())
+        {
+            b_score+=entry.getValue()*entry.getValue();
+        }
+
+        double divider=Math.sqrt(a_score*b_score);
+
+        return (divider==0 ? 0 : multiplication/divider);
     }
 }

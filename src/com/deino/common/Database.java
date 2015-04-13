@@ -228,6 +228,20 @@ public class Database {
         return null;
     }
 
+    public static String mergeCluster(Set<String> ids) {
+        if(ids.size()<2)
+            return null;
+
+        Iterator<String> it=ids.iterator();
+        String first_id=it.next();
+        while(it.hasNext())
+        {
+            first_id=mergeCluster(first_id,it.next());
+        }
+
+        return first_id;
+    }
+
     private static String[] delete(String id) {
         try {
             String ids[] = {id};
@@ -257,5 +271,26 @@ public class Database {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String createCluster(List<Article> articles) {
+        Cluster c = new Cluster();
+        for(Article a : articles)
+        {
+            if(c.getFirst_date()==null || c.getFirst_date().compareTo(a.getPublication_date())==1)
+                c.setFirst_date(a.getPublication_date());
+
+            if(c.getLast_date()==null || c.getLast_date().compareTo(a.getPublication_date())==-1)
+                c.setLast_date(a.getPublication_date());
+
+            c.getArticle_ids().add(a.getId());
+        }
+
+        c.setId(UUID.randomUUID().toString());
+        insert(c);
+        setClusterForArticles(c.getId(),c.getArticle_ids());
+
+
+        return c.getId();
     }
 }
