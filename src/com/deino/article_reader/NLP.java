@@ -10,17 +10,23 @@ import java.util.*;
  */
 public class NLP {
 
-    private static HashMap<String,Double> idf;
+    private static HashMap<String, Double> idf;
     private static double threshold=0.8;
-    private static double default_idf=1000;
-    static
-    {
-        idf=new HashMap<>();
+    private static double default_idf = 1000;
+
+    static {
+        idf = new HashMap<>();
         try {
-            Scanner in=new Scanner(new InputStreamReader(new FileInputStream("idf.txt")));
-            while(in.hasNext())
-            {
-                idf.put(in.next(),in.nextDouble());
+            Scanner in = new Scanner(new InputStreamReader(new FileInputStream("words.tsv")));
+            int count = Integer.valueOf(in.next());
+            default_idf = Math.log(count) / Math.log(2);       // thats why: http://stackoverflow.com/questions/13831150/logarithm-algorithm
+            System.out.println(default_idf);
+            while (in.hasNext()) {
+                String key = in.next();
+                double rate = count / in.nextDouble();
+                rate = Math.log(rate) / Math.log(2);
+                idf.put(key, rate);
+                System.out.println(key + " : " + rate);
             }
             in.close();
         } catch (FileNotFoundException e) {
@@ -33,14 +39,12 @@ public class NLP {
      * @param text
      * @return tokens
      */
-    public static List<String> tokenize(String text)
-    {
-        ArrayList<String> tokens=new ArrayList<>();
-        for(String token : text.split("[^\\p{L}0-9]"))
-        {
-            if(token.length()==0)
+    public static List<String> tokenize(String text) {
+        ArrayList<String> tokens = new ArrayList<>();
+        for (String token : text.split("[^\\p{L}0-9]")) {
+            if (token.length() == 0)
                 continue;
-            token=token.toLowerCase();
+            token = token.toLowerCase();
             tokens.add(token);
         }
 
@@ -51,31 +55,27 @@ public class NLP {
      * @param text
      * @return Top keywords by tf-idf
      */
-    public static TreeMap<String,Double> getTopTokens(String text)
-    {
-        HashMap<String,Integer> uniq_tokens = new HashMap<>();
+    public static TreeMap<String, Double> getTopTokens(String text) {
+        HashMap<String, Integer> uniq_tokens = new HashMap<>();
 
-        List<String> tokens= tokenize(text);
+        List<String> tokens = tokenize(text);
         Integer tmp;
 
-        for(String token : tokens)
-        {
-            if((tmp=uniq_tokens.get(token))==null)
-            {
-                tmp=0;
+        for (String token : tokens) {
+            if ((tmp = uniq_tokens.get(token)) == null) {
+                tmp = 0;
             }
             tmp++;
-            uniq_tokens.put(token,tmp);
+            uniq_tokens.put(token, tmp);
         }
 
-        TreeMap<String,Double> relative_tokens=new TreeMap<>();
-        double n=uniq_tokens.size();
+        TreeMap<String, Double> relative_tokens = new TreeMap<>();
+        double n = uniq_tokens.size();
         Double idf;
-        for (Map.Entry<String,Integer> entry : uniq_tokens.entrySet())
-        {
-            idf=NLP.idf.get(entry.getKey());
-            if(idf==null)
-                idf=default_idf;
+        for (Map.Entry<String, Integer> entry : uniq_tokens.entrySet()) {
+            idf = NLP.idf.get(entry.getKey());
+            if (idf == null)
+                idf = default_idf;
             relative_tokens.put(entry.getKey(), entry.getValue() / n * idf);
         }
 
