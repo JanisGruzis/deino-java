@@ -17,11 +17,11 @@ public class FeedManager {
 
     static {
         HashMap<String, RSSFeedParser> tmp = new HashMap<>();
-//        tmp.put(DELFI, new DelfiParser());
+        tmp.put(DELFI, new DelfiParser());
         tmp.put(APOLLO, new ApolloParser());
-//        tmp.put(DIENA, new DienaParser());
-//        tmp.put(LSM, new LSMParser());
-//        tmp.put(TVNET, new TvnetParser());
+        tmp.put(DIENA, new DienaParser());
+        tmp.put(LSM, new LSMParser());
+        tmp.put(TVNET, new TvnetParser());
         feeds = Collections.unmodifiableMap(tmp);
     }
 

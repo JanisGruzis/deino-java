@@ -47,7 +47,7 @@ public class ApolloParser extends RSSFeedParser {
                 HTMLParser htmlParser = new HTMLParser(raw_description);
                 art.setDescription(htmlParser.getText());
                 art.setImg_url(htmlParser.getFirstImgURL());
-
+                art.setURL(getValue(item, LINK));
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setPredefined_category(getUrl_category());
                 HashMap<String, String> headerMap = HTTPRequest.getResponseHeader(art.getURL());
