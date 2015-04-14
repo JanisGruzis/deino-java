@@ -23,9 +23,9 @@ public class Article extends CPSBase {
     private Date publication_date;
     private String title;
     private String description;
-    private String category;
-    private String URL;
     private String predefined_category;
+    private String URL;
+    private String category;
     private String img_url;
     private String source;
     private String id;
@@ -35,7 +35,7 @@ public class Article extends CPSBase {
 
 
     public Article() {
-        title = description = category = URL = img_url = source = id = predefined_category = "";
+        title = description = predefined_category = URL = img_url = source = id = category = "";
         publication_date = new Date();
         type = "article";
     }
@@ -66,12 +66,12 @@ public class Article extends CPSBase {
         this.description = description;
     }
 
-    public String getCategory() {
-        return category;
+    public String getPredefineCategory() {
+        return predefined_category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setPredefinedCategory(String predefined_category) {
+        this.predefined_category = predefined_category;
     }
 
     public String getURL() {
@@ -83,12 +83,12 @@ public class Article extends CPSBase {
         id = URLtoID(URL);
     }
 
-    public void setPredefined_category(String predefined_category) {
-        this.predefined_category = predefined_category;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getPredefined_category() {
-        return predefined_category;
+    public String getCategory() {
+        return category;
     }
 
     public void setPublication_date(Date publication_date) {

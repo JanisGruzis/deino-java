@@ -50,7 +50,7 @@ public class LSMParser extends RSSFeedParser {
                 art.setImg_url(getAttribute(item,"enclosure","url"));
 
                 art.setPublication_date(getValue(item, PUB_DATE));
-                art.setPredefined_category(getUrl_category());
+                art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
                 art.setSource(FeedManager.LSM);
                 addMessage(art);

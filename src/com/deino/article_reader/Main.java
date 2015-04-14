@@ -1,18 +1,12 @@
 package com.deino.article_reader;
 
-import java.awt.image.DataBuffer;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 
-import com.deino.common.Cluster;
-import com.deino.common.Database;
 import org.apache.commons.lang3.StringEscapeUtils;
-
-import javax.xml.crypto.Data;
 
 public class Main {
 
@@ -50,7 +44,7 @@ public class Main {
 //
 ////            System.out.println(temp.getSource());
 //            System.out.println(temp.getTitle());
-//            System.out.println(temp.getPredefined_category());
+//            System.out.println(temp.getCategory());
 ////            System.out.println(temp.getURL());
 ////            System.out.println(temp.getLocation());
 //            System.out.println("=================================");
@@ -77,9 +71,9 @@ public class Main {
 
             out.write(String.format("%s,", date_format.format(a.getPublication_date())));
             out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getTitle())));
+            out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getPredefineCategory())));
             out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getCategory())));
-            out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getPredefined_category())));
-            out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getCategory())));
+            out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getPredefineCategory())));
             out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getDescription())));
             out.write(String.format("%s,", StringEscapeUtils.escapeCsv(a.getURL())));
             out.write(String.format("%s\n", StringEscapeUtils.escapeCsv(a.getImg_url())));

@@ -100,7 +100,7 @@ public class Database {
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(article.getPublication_date());
-            cal.add(Calendar.DATE, -2); //minus two days;
+            cal.add(Calendar.DATE, -1); //minus one days;
             String date = CPSBase.dateFormat.format(cal.getTime());
 
             StringBuilder builder = new StringBuilder();
@@ -112,12 +112,12 @@ public class Database {
             CPSSearchRequest req = new CPSSearchRequest(String.format(
                     "<id>~%s</id>" +
                             "<" + CPSBase.SRC + ">~%s</" + CPSBase.SRC + ">" +
-                            "<" + CPSBase.PRED_CAT + ">%s</" + CPSBase.PRED_CAT + ">" +
+                            "<" + CPSBase.CAT_ID + ">%s</" + CPSBase.CAT_ID + ">" +
                             "<" + CPSBase.DATE + "> >= %s</" + CPSBase.DATE + ">" +
                             "<" + CPSBase.TOKEN + ">{%s}</" + CPSBase.TOKEN + ">",
                     StringEscapeUtils.escapeXml10(article.getId()),
                     StringEscapeUtils.escapeXml10(article.getSource()),
-                    StringEscapeUtils.escapeXml10(article.getPredefined_category()),
+                    StringEscapeUtils.escapeXml10(article.getCategory()),
                     StringEscapeUtils.escapeXml10(date),
                     builder.toString()
             ), 0, 1000);
@@ -141,7 +141,7 @@ public class Database {
 
     public static String getNodeValue(Element doc, String node_name)
     {
-        Node text=doc.getElementsByTagName(CPSBase.CLUST_ID).item(0).getFirstChild();
+        Node text=doc.getElementsByTagName(node_name).item(0).getFirstChild();
         if(text==null)
             return "";
         return text.getNodeValue();
@@ -156,9 +156,9 @@ public class Database {
         }
         article.setTitle(doc.getElementsByTagName(CPSBase.TITLE).item(0).getChildNodes().item(0).getNodeValue());
         article.setDescription(getNodeValue(doc, CPSBase.DESCRIPTION));
-        article.setCategory(getNodeValue(doc,CPSBase.CAT_ID));
+        article.setCategory(getNodeValue(doc, CPSBase.CAT_ID));
         article.setURL(doc.getElementsByTagName(CPSBase.URL).item(0).getChildNodes().item(0).getNodeValue());
-        article.setPredefined_category(doc.getElementsByTagName(CPSBase.PRED_CAT).item(0).getChildNodes().item(0).getNodeValue());
+        article.setPredefinedCategory(getNodeValue(doc, CPSBase.PRED_CAT));
         article.setImg_url(getNodeValue(doc, CPSBase.IMG_URL));
         article.setSource(doc.getElementsByTagName(CPSBase.SRC).item(0).getChildNodes().item(0).getNodeValue());
         article.setCluster(doc.getElementsByTagName(CPSBase.CLUST_ID).item(0).getChildNodes().item(0).getNodeValue());
@@ -293,7 +293,7 @@ public class Database {
             c.getArticle_ids().add(a.getId());
         }
 
-        c.setCategory_id(articles.get(0).getPredefined_category());
+        c.setCategory_id(articles.get(0).getCategory());
 
         c.setId(UUID.randomUUID().toString());
         insert(c);

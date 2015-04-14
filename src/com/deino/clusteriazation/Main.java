@@ -18,9 +18,9 @@ public class Main {
     private static void save_article(Article article)
     {
         if(Database.isExistingArticle(article.getId())) {
-            System.out.println(article.toXML());
-            throw new RuntimeException();
-            //return;
+            //System.out.println(article.toXML());
+            //throw new RuntimeException();
+            return;
         }
         ArrayList<Token> all_keywords= NLP.getTopTokens(article.getTitle() + " " + article.getDescription());
         HashMap<String,Double> top_keywords=new HashMap<>();
@@ -90,8 +90,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        System.out.println((new Date()).toString());
         insertNewArticles();
+        System.out.println((new Date()).toString());
         clusteizeNewArticles();
+        System.out.println((new Date()).toString());
     }
 
 }

@@ -49,7 +49,7 @@ public class TvnetParser extends RSSFeedParser {
                 art.setImg_url(htmlParser.getLastImgURL());
 
                 art.setPublication_date(getValue(item, PUB_DATE));
-                art.setPredefined_category(getUrl_category());
+                art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
                 art.setSource(FeedManager.TVNET);
                 addMessage(art);

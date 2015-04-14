@@ -47,8 +47,8 @@ public class DienaParser extends RSSFeedParser {
                 art.setDescription(htmlParser.getText());
                 art.setImg_url(getAttribute(item,"enclosure","url"));
                 art.setPublication_date(getValue(item, PUB_DATE));
-                art.setCategory(getValue(item, CATEGORY));
-                art.setPredefined_category(getUrl_category());
+                art.setPredefinedCategory(getValue(item, CATEGORY));
+                art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
                 art.setSource(FeedManager.DIENA);
                 addMessage(art);

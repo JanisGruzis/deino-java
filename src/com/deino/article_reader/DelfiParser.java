@@ -50,10 +50,10 @@ public class DelfiParser extends RSSFeedParser {
                 art.setImg_url(htmlParser.getLastImgURL());
 
                 art.setPublication_date(getValue(item, PUB_DATE));
-                art.setCategory(getValue(item, CATEGORY));
-                art.setPredefined_category(getUrl_category());
+                art.setPredefinedCategory(getValue(item, CATEGORY));
+                art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                art.setSource(FeedManager.APOLLO);
+                art.setSource(FeedManager.DELFI);
                 addMessage(art);
             }
         } catch (Exception e) {

@@ -49,7 +49,7 @@ public class ApolloParser extends RSSFeedParser {
                 art.setImg_url(htmlParser.getFirstImgURL());
                 art.setURL(getValue(item, LINK));
                 art.setPublication_date(getValue(item, PUB_DATE));
-                art.setPredefined_category(getUrl_category());
+                art.setCategory(getUrl_category());
                 HashMap<String, String> headerMap = HTTPRequest.getResponseHeader(art.getURL());
                 art.setURL(headerMap.get("Location"));
                 art.setSource(FeedManager.APOLLO);
