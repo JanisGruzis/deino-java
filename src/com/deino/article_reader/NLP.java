@@ -19,18 +19,18 @@ public class NLP {
         try {
             Scanner in = new Scanner(new InputStreamReader(new FileInputStream("words.tsv")));
             int count = Integer.valueOf(in.next());
-            default_idf = Math.log(count) / Math.log(2);       // thats why: http://stackoverflow.com/questions/13831150/logarithm-algorithm
+            default_idf = Math.log(count);// / Math.log(2);       // thats why: http://stackoverflow.com/questions/13831150/logarithm-algorithm
             System.out.println(default_idf);
             while (in.hasNext()) {
                 String key = in.next();
                 double rate = count / in.nextDouble();
-                rate = Math.log(rate) / Math.log(2);
+                rate = Math.log(rate);// / Math.log(2);
                 idf.put(key, rate);
-                System.out.println(key + " : " + rate);
+                //System.out.println(key + " : " + rate);
             }
             in.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }
@@ -55,7 +55,7 @@ public class NLP {
      * @param text
      * @return Top keywords by tf-idf
      */
-    public static TreeMap<String, Double> getTopTokens(String text) {
+    public static ArrayList<Token> getTopTokens(String text) {
         HashMap<String, Integer> uniq_tokens = new HashMap<>();
 
         List<String> tokens = tokenize(text);
@@ -69,17 +69,20 @@ public class NLP {
             uniq_tokens.put(token, tmp);
         }
 
-        TreeMap<String, Double> relative_tokens = new TreeMap<>();
+        ArrayList<Token> sorted_tokens = new ArrayList<>();
         double n = uniq_tokens.size();
         Double idf;
+
         for (Map.Entry<String, Integer> entry : uniq_tokens.entrySet()) {
             idf = NLP.idf.get(entry.getKey());
             if (idf == null)
                 idf = default_idf;
-            relative_tokens.put(entry.getKey(), entry.getValue() / n * idf);
+            sorted_tokens.add(new Token(entry.getKey(), entry.getValue() / n * idf));
         }
 
-        return relative_tokens;
+        Collections.sort(sorted_tokens,Collections.reverseOrder());
+
+        return sorted_tokens;
     }
 
     public static boolean isEqual(HashMap<String, Double> a, HashMap<String, Double> b) {
@@ -117,3 +120,4 @@ public class NLP {
         return (divider==0 ? 0 : multiplication/divider);
     }
 }
+

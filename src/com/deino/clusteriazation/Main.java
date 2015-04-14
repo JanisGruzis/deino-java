@@ -3,12 +3,9 @@ package com.deino.clusteriazation;
 import com.deino.article_reader.Article;
 import com.deino.article_reader.FeedManager;
 import com.deino.article_reader.NLP;
+import com.deino.article_reader.Token;
 import com.deino.common.Database;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -16,7 +13,7 @@ import java.util.*;
  */
 public class Main {
 
-    public static final int keyword_limit=5;
+    public static final int keyword_limit=6;
 
     private static void save_article(Article article)
     {
@@ -25,14 +22,14 @@ public class Main {
             throw new RuntimeException();
             //return;
         }
-        TreeMap<String,Double> all_keywords= NLP.getTopTokens(article.getTitle() + " " + article.getDescription());
+        ArrayList<Token> all_keywords= NLP.getTopTokens(article.getTitle() + " " + article.getDescription());
         HashMap<String,Double> top_keywords=new HashMap<>();
         int i=0;
-        for(Map.Entry<String,Double> entry : all_keywords.entrySet())
+        for(Token token : all_keywords)
         {
             if(i++>=keyword_limit)
                 break;
-            top_keywords.put(entry.getKey(), entry.getValue());
+            top_keywords.put(token.token, token.value);
         }
 
         article.setKeywords(top_keywords);
@@ -54,16 +51,16 @@ public class Main {
         HashMap<String,List<Article>> equal=new HashMap<>();
         List<Article> articles;
 
-        for(Article other : similar)
-        {
-            if(NLP.isEqual(article.getKeywords(),other.getKeywords()))
-            {
-                articles=equal.get(other.getCluster());
-                if(articles==null) {
-                    articles = new ArrayList<>();
-                    equal.put(other.getCluster(),articles);
+        if(similar!=null) {
+            for (Article other : similar) {
+                if (NLP.isEqual(article.getKeywords(), other.getKeywords())) {
+                    articles = equal.get(other.getCluster());
+                    if (articles == null) {
+                        articles = new ArrayList<>();
+                        equal.put(other.getCluster(), articles);
+                    }
+                    articles.add(other);
                 }
-                articles.add(other);
             }
         }
 
@@ -84,12 +81,17 @@ public class Main {
     public static void clusteizeNewArticles()
     {
         Article article;
-        while((article=Database.getUnclusterizedArticle())!=null)
+        Integer i=0;
+        while((article=Database.getUnclusterizedArticle())!=null) {
+
+            System.out.println((++i).toString()+" "+article.getTitle());
             clusterizeArticle(article);
+        }
     }
 
     public static void main(String[] args) {
         insertNewArticles();
+        clusteizeNewArticles();
     }
 
 }

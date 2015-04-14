@@ -117,6 +117,7 @@ public class Database {
                             "<" + CPSBase.TOKEN + ">{%s}</" + CPSBase.TOKEN + ">",
                     StringEscapeUtils.escapeXml10(article.getId()),
                     StringEscapeUtils.escapeXml10(article.getSource()),
+                    StringEscapeUtils.escapeXml10(article.getPredefined_category()),
                     StringEscapeUtils.escapeXml10(date),
                     builder.toString()
             ), 0, 1000);
@@ -128,6 +129,7 @@ public class Database {
             ArrayList<Article> similar = new ArrayList<>();
 
             for (Element item : resp.getDocuments()) {
+                System.out.println("\t"+item.getFirstChild().getFirstChild().getNodeValue());
                 similar.add(parseArticle(item));
             }
 
@@ -135,6 +137,14 @@ public class Database {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getNodeValue(Element doc, String node_name)
+    {
+        Node text=doc.getElementsByTagName(CPSBase.CLUST_ID).item(0).getFirstChild();
+        if(text==null)
+            return "";
+        return text.getNodeValue();
     }
 
     public static Article parseArticle(Element doc) {
@@ -145,14 +155,11 @@ public class Database {
             throw new RuntimeException(e);
         }
         article.setTitle(doc.getElementsByTagName(CPSBase.TITLE).item(0).getChildNodes().item(0).getNodeValue());
-        article.setDescription(doc.getElementsByTagName(CPSBase.DESCRIPTION).item(0).getChildNodes().item(0).getNodeValue());
-        NodeList list = doc.getElementsByTagName(CPSBase.CAT_ID);
-        if (list.getLength() > 0)
-            article.setCategory(list.item(0).getNodeValue());
-
+        article.setDescription(getNodeValue(doc, CPSBase.DESCRIPTION));
+        article.setCategory(getNodeValue(doc,CPSBase.CAT_ID));
         article.setURL(doc.getElementsByTagName(CPSBase.URL).item(0).getChildNodes().item(0).getNodeValue());
         article.setPredefined_category(doc.getElementsByTagName(CPSBase.PRED_CAT).item(0).getChildNodes().item(0).getNodeValue());
-        article.setImg_url(doc.getElementsByTagName(CPSBase.IMG_URL).item(0).getChildNodes().item(0).getNodeValue());
+        article.setImg_url(getNodeValue(doc, CPSBase.IMG_URL));
         article.setSource(doc.getElementsByTagName(CPSBase.SRC).item(0).getChildNodes().item(0).getNodeValue());
         article.setCluster(doc.getElementsByTagName(CPSBase.CLUST_ID).item(0).getChildNodes().item(0).getNodeValue());
 
@@ -257,7 +264,7 @@ public class Database {
     }
 
     public static void setClusterForArticles(String cluster_id, List<String> articles_id) {
-        CPSUpdateRequest req = new CPSUpdateRequest();
+        CPSPartialReplaceRequest req = new CPSPartialReplaceRequest();
         LinkedList<String> docs = new LinkedList<>();
         for (String id : articles_id) {
             docs.add(String.format("<document>" +
@@ -285,6 +292,8 @@ public class Database {
 
             c.getArticle_ids().add(a.getId());
         }
+
+        c.setCategory_id(articles.get(0).getPredefined_category());
 
         c.setId(UUID.randomUUID().toString());
         insert(c);
