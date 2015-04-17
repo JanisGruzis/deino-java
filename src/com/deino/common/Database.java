@@ -93,6 +93,27 @@ public class Database {
         }
     }
 
+    public static List<Article> getArticles(CPSSearchRequest request)
+    {
+        try {
+
+            CPSSearchResponse resp = (CPSSearchResponse) connection.sendRequest(request);
+            if (resp.getFound() == 0)
+                return null;
+
+            ArrayList<Article> articles = new ArrayList<>();
+
+            for (Element item : resp.getDocuments()) {
+                System.out.println("\t"+item.getFirstChild().getFirstChild().getNodeValue());
+                articles.add(parseArticle(item));
+            }
+
+            return articles;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static List<Article> getSimilarArticles(Article article) {
 

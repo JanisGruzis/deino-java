@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class Main {
 
-    public static final int keyword_limit=6;
+    public static final int keyword_limit=3;
 
     private static void save_article(Article article)
     {

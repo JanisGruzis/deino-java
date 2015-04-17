@@ -11,7 +11,7 @@ import java.util.*;
 public class NLP {
 
     private static HashMap<String, Double> idf;
-    private static double threshold=0.65;
+    private static double threshold=0.29;
     private static double default_idf = 1000;
 
     static {
