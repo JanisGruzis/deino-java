@@ -25,6 +25,8 @@ public class DienaParser extends RSSFeedParser {
         category_urls.put("sport", "http://www.diena.lv/sports.xml");
         category_urls.put("culture", "http://www.diena.lv/kd.xml");
         category_urls.put("entertainment", "http://www.diena.lv/izklaide.xml");
+        category_urls.put("business","http://www.db.lv/finanses.xml");
+        category_urls.put("technology","http://www.db.lv/tehnologijas.xml");
     }
 
     @Override

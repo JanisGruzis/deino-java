@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import com.deino.common.Database;
 import org.apache.commons.lang3.StringEscapeUtils;
+
+import javax.xml.crypto.Data;
 
 public class Main {
 
@@ -44,8 +47,8 @@ public class Main {
 //
 ////            System.out.println(temp.getSource());
 //            System.out.println(temp.getTitle());
-//            System.out.println(temp.getCategory());
-////            System.out.println(temp.getURL());
+////            System.out.println(temp.getCategory());
+//            System.out.println(temp.getImg_url());
 ////            System.out.println(temp.getLocation());
 //            System.out.println("=================================");
 //            System.out.println();

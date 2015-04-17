@@ -87,7 +87,7 @@ public abstract class RSSFeedParser {
         String result = "";
         NodeList list = parent.getElementsByTagName(nodeName);
         if(list.getLength() >0){
-            list.item(0).getAttributes().getNamedItem(attrName).getNodeValue();
+           result =  list.item(0).getAttributes().getNamedItem(attrName).getNodeValue();
         }
         return result     ;
     }
