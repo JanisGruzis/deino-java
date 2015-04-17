@@ -6,14 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import com.deino.common.Database;
 import org.apache.commons.lang3.StringEscapeUtils;
+
+import javax.xml.crypto.Data;
 
 public class Main {
 
 
 
     public static void main(String[] args) {
-
+        Database.clearClusters();
 //        Cluster cl =  new Cluster();
 //        cl.setId("second");
 //        cl.setFirst_date(new Date());

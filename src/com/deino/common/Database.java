@@ -129,7 +129,7 @@ public class Database {
             ArrayList<Article> similar = new ArrayList<>();
 
             for (Element item : resp.getDocuments()) {
-                System.out.println("\t"+item.getFirstChild().getFirstChild().getNodeValue());
+                System.out.println("\t" + item.getFirstChild().getFirstChild().getNodeValue());
                 similar.add(parseArticle(item));
             }
 
@@ -139,10 +139,9 @@ public class Database {
         }
     }
 
-    public static String getNodeValue(Element doc, String node_name)
-    {
-        Node text=doc.getElementsByTagName(node_name).item(0).getFirstChild();
-        if(text==null)
+    public static String getNodeValue(Element doc, String node_name) {
+        Node text = doc.getElementsByTagName(node_name).item(0).getFirstChild();
+        if (text == null)
             return "";
         return text.getNodeValue();
     }
@@ -236,14 +235,13 @@ public class Database {
     }
 
     public static String mergeCluster(Set<String> ids) {
-        if(ids.size()<2)
+        if (ids.size() < 2)
             return null;
 
-        Iterator<String> it=ids.iterator();
-        String first_id=it.next();
-        while(it.hasNext())
-        {
-            first_id=mergeCluster(first_id,it.next());
+        Iterator<String> it = ids.iterator();
+        String first_id = it.next();
+        while (it.hasNext()) {
+            first_id = mergeCluster(first_id, it.next());
         }
 
         return first_id;
@@ -282,12 +280,11 @@ public class Database {
 
     public static String createCluster(List<Article> articles) {
         Cluster c = new Cluster();
-        for(Article a : articles)
-        {
-            if(c.getFirst_date()==null || c.getFirst_date().compareTo(a.getPublication_date())==1)
+        for (Article a : articles) {
+            if (c.getFirst_date() == null || c.getFirst_date().compareTo(a.getPublication_date()) == 1)
                 c.setFirst_date(a.getPublication_date());
 
-            if(c.getLast_date()==null || c.getLast_date().compareTo(a.getPublication_date())==-1)
+            if (c.getLast_date() == null || c.getLast_date().compareTo(a.getPublication_date()) == -1)
                 c.setLast_date(a.getPublication_date());
 
             c.getArticle_ids().add(a.getId());
@@ -297,9 +294,61 @@ public class Database {
 
         c.setId(UUID.randomUUID().toString());
         insert(c);
-        setClusterForArticles(c.getId(),c.getArticle_ids());
+        setClusterForArticles(c.getId(), c.getArticle_ids());
 
 
         return c.getId();
+    }
+
+    public static int clearClusters() {
+        try {
+            int found = 1, total_found = 0;
+            while (found > 0) {
+                CPSSearchRequest req = new CPSSearchRequest(String.format(
+                        "<" + CPSBase.TYPE + ">cluster</" + CPSBase.TYPE + ">"), 0, 1000);
+                CPSSearchResponse resp = (CPSSearchResponse) connection.sendRequest(req);
+                found = resp.getFound();
+                total_found += found;
+                if (found > 0) {
+                    for (int i = 0; i < found; i++) {
+                        Cluster cl = parseCluster(resp.getDocuments().get(i));
+                        delete(cl.getId());
+                    }
+                }
+            }
+            int articles = 1, total_articles = 0;
+            while (articles > 0) {
+                CPSSearchRequest req = new CPSSearchRequest(String.format(
+                        "<" + CPSBase.TYPE + ">article</" + CPSBase.TYPE + ">" +
+                                "<"+CPSBase.CLUST_ID+">~='-1'</"+CPSBase.CLUST_ID+">"), 0, 1000);
+                CPSSearchResponse cluterizedArticles = (CPSSearchResponse) connection.sendRequest(req);
+                articles = cluterizedArticles.getDocuments().size();
+                if (articles > 0) {
+                    total_articles += articles;
+                    CPSPartialReplaceRequest updateArticles = new CPSPartialReplaceRequest();
+                    LinkedList<String> docs = new LinkedList<>();
+                    for (int i = 0; i < articles; i++) {
+                        Article article = parseArticle(cluterizedArticles.getDocuments().get(i));
+                        docs.add(String.format("<document>" +
+                                "<" + CPSBase.ID + ">%s</" + CPSBase.ID + ">" +
+                                "<" + CPSBase.CLUST_ID + ">-1</" + CPSBase.CLUST_ID + ">" +
+                                "</document>", article.getId()));
+                    }
+
+                    updateArticles.setStringDocuments(docs);
+                    System.out.println("Updated "+total_articles+ " articles.");
+                    try {
+                        connection.sendRequest(updateArticles);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            return found;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
