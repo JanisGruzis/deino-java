@@ -51,6 +51,11 @@ public class TvnetParser extends RSSFeedParser {
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
+                if(getUrl_category().equals("local")){
+                    if(art.getURL().contains("arvalstis"))      {
+                        art.setCategory("abroad");
+                    }
+                }
                 art.setSource(FeedManager.TVNET);
                 addMessage(art);
             }

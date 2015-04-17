@@ -16,7 +16,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Database.clearClusters();
+
 //        Cluster cl =  new Cluster();
 //        cl.setId("second");
 //        cl.setFirst_date(new Date());
