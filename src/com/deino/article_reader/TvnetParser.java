@@ -43,16 +43,18 @@ public class TvnetParser extends RSSFeedParser {
                 Element item = (Element) items.item(i);
                 Article art = new Article();
                 art.setTitle(getValue(item, TITLE));
-                String raw_description = getValue(item, DESCRIPTION,1);
+                String raw_description = getValue(item, DESCRIPTION, 1);
                 HTMLParser htmlParser = new HTMLParser(raw_description);
                 art.setDescription(htmlParser.getText());
-                art.setImg_url(htmlParser.getLastImgURL());
+                String img_url = htmlParser.getLastImgURL();
+                if (img_url != null && img_url.length() > 0)
+                    art.setImg_url(img_url.replace("80x60", "506x285"));
 
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
-                if(getUrl_category().equals("local")){
-                    if(art.getURL().contains("arvalstis"))      {
+                if (getUrl_category().equals("local")) {
+                    if (art.getURL().contains("arvalstis")) {
                         art.setCategory("abroad");
                     }
                 }
@@ -65,7 +67,6 @@ public class TvnetParser extends RSSFeedParser {
         }
         return true;
     }
-
 
 
     private String getContent(String url) {

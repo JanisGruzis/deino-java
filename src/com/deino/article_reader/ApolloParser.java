@@ -1,5 +1,6 @@
 package com.deino.article_reader;
 
+import org.jsoup.select.Elements;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -53,7 +54,7 @@ public class ApolloParser extends RSSFeedParser {
                 HashMap<String, String> headerMap = HTTPRequest.getResponseHeader(art.getURL());
                 art.setURL(headerMap.get("Location"));
                 art.setSource(FeedManager.APOLLO);
-                art.setText(getContent(art.getURL()));
+                art.setText(getContent(art));
                 addMessage(art);
             }
         } catch (Exception e) {
@@ -61,9 +62,16 @@ public class ApolloParser extends RSSFeedParser {
         }
         return true;
     }
-    private String getContent(String url) {
-        HTMLParser html = new HTMLParser(HTTPRequest.getContent(url));
+    private String getContent(Article art) {
+        HTMLParser html = new HTMLParser(HTTPRequest.getContent(art.getURL()));
         String content = html.getById("article-content");
+        org.jsoup.nodes.Element div = html.getHtml_doc().select(".article-pic").first();
+        org.jsoup.nodes.Element img =  div.select("img").first();
+        if (img != null) {
+         String src = img.attr("src");
+            if(src.length()>0)
+                art.setImg_url(src);
+        }
         return content;
     }
 
