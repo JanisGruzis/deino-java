@@ -68,9 +68,9 @@ public class TvnetParser extends RSSFeedParser {
 
 
 
-    private String getContent(String url) {
+    public static String getContent(String url) {
         HTMLParser html = new HTMLParser(HTTPRequest.getContent(url));
-        String content = html.getByClass("fullArticle");
+        String content = html.getById("articleBody");
         return content;
     }
 
