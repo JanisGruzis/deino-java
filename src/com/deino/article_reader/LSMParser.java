@@ -53,12 +53,22 @@ public class LSMParser extends RSSFeedParser {
                 art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
                 art.setSource(FeedManager.LSM);
+                art.setText(getContent(art.getURL()));
                 addMessage(art);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
+    }
+
+
+
+    private String getContent(String url) {
+        HTMLParser html = new HTMLParser(HTTPRequest.getContent(url));
+        String lead = html.getById("article-lead");
+        String bodyText = html.getById("article-bodies");
+        return bodyText + lead;
     }
 
 }

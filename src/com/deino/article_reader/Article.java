@@ -30,6 +30,7 @@ public class Article extends CPSBase {
     private String source;
     private String id;
     private String type;
+    private String text;
     private String cluster = "-1";
     private HashMap<String, Double> keywords;
 
@@ -181,6 +182,14 @@ public class Article extends CPSBase {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
 

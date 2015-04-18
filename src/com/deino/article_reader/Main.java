@@ -40,19 +40,19 @@ public class Main {
 //        Database.insert(cl);
 //       Database.mergeCluster("first","second");
 
-//        HashMap<String,Article> result = FeedManager.getMessages();
-//        for (Map.Entry<String, Article> entry : result.entrySet()) {
-//            Article temp = entry.getValue();
-//            System.out.println("=================================");
-//
-////            System.out.println(temp.getSource());
+        HashMap<String,Article> result = FeedManager.getMessages();
+        for (Map.Entry<String, Article> entry : result.entrySet()) {
+            Article temp = entry.getValue();
+            System.out.println("=================================");
+
+//            System.out.println(temp.getSource());
 //            System.out.println(temp.getTitle());
-////            System.out.println(temp.getCategory());
-//            System.out.println(temp.getImg_url());
-////            System.out.println(temp.getLocation());
-//            System.out.println("=================================");
-//            System.out.println();
-//        }
+//            System.out.println(temp.getCategory());
+            System.out.println(temp.getText());
+//            System.out.println(temp.getLocation());
+            System.out.println("=================================");
+            System.out.println();
+        }
 
 
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");

@@ -20,7 +20,7 @@ public class DelfiParser extends RSSFeedParser {
     public DelfiParser() {
         super(FEED_URL);
         messages = new HashMap<String, Article>();
-         category_urls.put("local", "http://www.delfi.lv/latvija_rss.php");
+        category_urls.put("local", "http://www.delfi.lv/latvija_rss.php");
         category_urls.put("business", "http://www.delfi.lv/bizness/rss.php");
         category_urls.put("abroad", "http://www.delfi.lv/arzemes_rss.php");
         category_urls.put("sport", "http://www.delfi.lv/sports/rss.php");
@@ -54,12 +54,21 @@ public class DelfiParser extends RSSFeedParser {
                 art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
                 art.setSource(FeedManager.DELFI);
+                System.out.println(art.getDescription());
+                art.setText(getContent(art.getURL()));
                 addMessage(art);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
+    }
+
+    private String getContent(String url) {
+        HTMLParser html = new HTMLParser(HTTPRequest.getContent(url));
+        String lead = html.getByClass("article-lead");
+        String bodyText = html.getById("bodyText");
+        return bodyText + lead;
     }
 
 }

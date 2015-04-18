@@ -47,18 +47,25 @@ public class DienaParser extends RSSFeedParser {
                 String raw_description = getValue(item, DESCRIPTION,1);
                 HTMLParser htmlParser = new HTMLParser(raw_description);
                 art.setDescription(htmlParser.getText());
-                art.setImg_url(getAttribute(item,"enclosure","url"));
+                art.setImg_url(getAttribute(item, "enclosure", "url"));
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setPredefinedCategory(getValue(item, CATEGORY));
                 art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
                 art.setSource(FeedManager.DIENA);
+                art.setText(getContent(art.getURL()));
                 addMessage(art);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
+    }
+
+    private String getContent(String url) {
+        HTMLParser html = new HTMLParser(HTTPRequest.getContent(url));
+        String content = html.getById("knc_lv");
+        return content;
     }
 
 }

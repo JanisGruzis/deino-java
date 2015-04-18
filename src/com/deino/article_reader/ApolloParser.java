@@ -53,12 +53,18 @@ public class ApolloParser extends RSSFeedParser {
                 HashMap<String, String> headerMap = HTTPRequest.getResponseHeader(art.getURL());
                 art.setURL(headerMap.get("Location"));
                 art.setSource(FeedManager.APOLLO);
+                art.setText(getContent(art.getURL()));
                 addMessage(art);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
+    }
+    private String getContent(String url) {
+        HTMLParser html = new HTMLParser(HTTPRequest.getContent(url));
+        String content = html.getById("article-content");
+        return content;
     }
 
 }
