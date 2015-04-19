@@ -1,10 +1,12 @@
 package com.deino.article_reader;
 
+import com.deino.common.Database;
 import org.jsoup.select.Elements;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.xml.crypto.Data;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedInputStream;
@@ -42,17 +44,21 @@ public class ApolloParser extends RSSFeedParser {
 
             for (int i = 0; i < items.getLength(); i++) {
                 Element item = (Element) items.item(i);
+                String proxy_url = getValue(item, LINK);
+                HashMap<String, String> headerMap = HTTPRequest.getResponseHeader(proxy_url);
+                String url = headerMap.get("Location");
+                if(url == null || Database.isExistingArticle(Article.URLtoID(url))){
+                    continue;
+                }
                 Article art = new Article();
                 art.setTitle(getValue(item, TITLE));
                 String raw_description = getValue(item, DESCRIPTION);
                 HTMLParser htmlParser = new HTMLParser(raw_description);
                 art.setDescription(htmlParser.getText());
                 art.setImg_url(htmlParser.getFirstImgURL());
-                art.setURL(getValue(item, LINK));
+                art.setURL(url);
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setCategory(getUrl_category());
-                HashMap<String, String> headerMap = HTTPRequest.getResponseHeader(art.getURL());
-                art.setURL(headerMap.get("Location"));
                 art.setSource(FeedManager.APOLLO);
                 art.setText(getContent(art));
                 addMessage(art);

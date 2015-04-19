@@ -1,5 +1,6 @@
 package com.deino.article_reader;
 
+import com.deino.common.Database;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -42,6 +43,9 @@ public class LSMParser extends RSSFeedParser {
 
             for (int i = 0; i < items.getLength(); i++) {
                 Element item = (Element) items.item(i);
+                String url = getValue(item, LINK);
+                if(Database.isExistingArticle(Article.URLtoID(url)))
+                    continue;
                 Article art = new Article();
                 art.setTitle(getValue(item, TITLE));
                 String raw_description = getValue(item, DESCRIPTION);
@@ -51,7 +55,7 @@ public class LSMParser extends RSSFeedParser {
 
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setCategory(getUrl_category());
-                art.setURL(getValue(item, LINK));
+                art.setURL(url);
                 art.setSource(FeedManager.LSM);
                 art.setText(getContent(art.getURL()));
                 addMessage(art);

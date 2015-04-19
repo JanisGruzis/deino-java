@@ -1,5 +1,6 @@
 package com.deino.article_reader;
 
+import com.deino.common.Database;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -41,6 +42,9 @@ public class TvnetParser extends RSSFeedParser {
 
             for (int i = 0; i < items.getLength(); i++) {
                 Element item = (Element) items.item(i);
+                String url = getValue(item, LINK);
+                if(Database.isExistingArticle(Article.URLtoID(url)))
+                    continue;
                 Article art = new Article();
                 art.setTitle(getValue(item, TITLE));
                 String raw_description = getValue(item, DESCRIPTION, 1);
@@ -52,7 +56,7 @@ public class TvnetParser extends RSSFeedParser {
 
                 art.setPublication_date(getValue(item, PUB_DATE));
                 art.setCategory(getUrl_category());
-                art.setURL(getValue(item, LINK));
+                art.setURL(url);
                 if (getUrl_category().equals("local")) {
                     if (art.getURL().contains("arvalstis")) {
                         art.setCategory("abroad");
