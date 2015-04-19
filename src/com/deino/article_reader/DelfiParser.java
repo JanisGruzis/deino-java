@@ -54,7 +54,6 @@ public class DelfiParser extends RSSFeedParser {
                 art.setCategory(getUrl_category());
                 art.setURL(getValue(item, LINK));
                 art.setSource(FeedManager.DELFI);
-                System.out.println(art.getDescription());
                 art.setText(getContent(art.getURL()));
                 addMessage(art);
             }
