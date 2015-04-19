@@ -1,9 +1,6 @@
 package com.deino.clusteriazation;
 
-import com.deino.article_reader.Article;
-import com.deino.article_reader.FeedManager;
-import com.deino.article_reader.NLP;
-import com.deino.article_reader.Token;
+import com.deino.article_reader.*;
 import com.deino.common.Database;
 
 import java.util.*;
@@ -13,7 +10,7 @@ import java.util.*;
  */
 public class Main {
 
-    public static final int keyword_limit=3;
+    public static final int keyword_limit=9;
 
     private static void save_article(Article article)
     {
@@ -22,7 +19,7 @@ public class Main {
             //throw new RuntimeException();
             return;
         }
-        ArrayList<Token> all_keywords= NLP.getTopTokens(article.getTitle() + " " + article.getDescription());
+        ArrayList<Token> all_keywords= NLP.getTopTokens(article.getTitle() + " " + article.getText());
         HashMap<String,Double> top_keywords=new HashMap<>();
         int i=0;
         for(Token token : all_keywords)
@@ -90,7 +87,12 @@ public class Main {
     }
 
     public static void main(String[] args) {
+//        System.out.println(DienaParser.getContent("http://www.diena.lv/pasaule/zviedrija-palielina-aizsardzibas-budzetu-krievijas-draudu-del-14095061"));
+//        System.out.println("-------------------------------------");
+//        System.out.println(TvnetParser.getContent("http://www.tvnet.lv/zinas/arvalstis/556379-zviedrija_palielina_aizsardzibas_budzetu_krievijas_draudu_del"));
+
         System.out.println((new Date()).toString());
+//        Database.clearClusters();
         insertNewArticles();
         System.out.println((new Date()).toString());
         clusteizeNewArticles();

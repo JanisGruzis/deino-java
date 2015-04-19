@@ -62,7 +62,7 @@ public class DienaParser extends RSSFeedParser {
         return true;
     }
 
-    private String getContent(String url) {
+    public static String getContent(String url) {
         HTMLParser html = new HTMLParser(HTTPRequest.getContent(url));
         String content = html.getById("knc_lv");
         return content;

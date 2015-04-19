@@ -51,7 +51,7 @@ public class Main {
 
         CPSSearchRequest req=new CPSSearchRequest(
                 String.format("<type>article</type>")
-                ,0,300);
+                ,0,3000);
         req.setOrdering("<date><date>descending</date></date>");
         List<SimilarityResult> result=getSimilaritResults(req);
 
